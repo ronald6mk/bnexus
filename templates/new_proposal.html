@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}New proposal · ProposalForge{% endblock %}
+{% block content %}
+<section class="section">
+  <h1>New proposal</h1>
+  <p class="muted">Offline generator — no AI API key required.</p>
+  {% if error %}<div class="alert err">{{ error }}</div>{% endif %}
+  <form method="post" action="/proposals/new" class="card">
+    <label>Client name *</label>
+    <input name="client_name" required placeholder="Alex Morgan" />
+    <label>Client company</label>
+    <input name="client_company" placeholder="Morgan Digital LLC" />
+    <label>Industry template</label>
+    <select name="industry">
+      <option value="web">Web & Digital Project</option>
+      <option value="it_retainer">IT Support Retainer</option>
+      <option value="consulting">Consulting Engagement</option>
+      <option value="custom_ict" selected>Custom ICT Solution</option>
+    </select>
+    <label>Services you will provide</label>
+    <textarea name="services" placeholder="e.g. rebuild marketing site, migrate hosting, train team"></textarea>
+    <label>Client goals</label>
+    <textarea name="goals" placeholder="e.g. increase qualified leads and reduce support tickets"></textarea>
+    <label>Budget range</label>
+    <input name="budget_range" placeholder="e.g. $5k–$8k" />
+    <label>Timeline</label>
+    <input name="timeline" placeholder="e.g. 6 weeks" />
+    <label>Your differentiators</label>
+    <textarea name="differentiators" placeholder="e.g. fixed milestones, weekly demos, local timezone support"></textarea>
+    <label>Your company name (brand)</label>
+    <input name="sender_company" value="{{ user.company_name or '' }}" placeholder="Acme Studio" />
+    <label>Brand color</label>
+    <input name="brand_color" type="color" value="{{ user.brand_color or '#0f766e' }}" style="height:2.5rem;padding:0.2rem" />
+    <div class="form-actions">
+      <button class="btn" type="submit">Generate proposal</button>
+      <a class="btn secondary" href="/dashboard">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

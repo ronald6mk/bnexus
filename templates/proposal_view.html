@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}{{ proposal.title }} — ProposalForge{% endblock %}
+{% block content %}
+<div class="container" style="padding-bottom:2.5rem;">
+  <div class="page-header">
+    <div>
+      <h1 style="font-size:1.35rem;">{{ proposal.title }}</h1>
+      <p class="muted" style="margin:0.25rem 0 0;">
+        {{ proposal.client_name }}{% if proposal.client_company %} · {{ proposal.client_company }}{% endif %}
+        · <span class="pill">{{ industries.get(proposal.industry, proposal.industry) }}</span>
+      </p>
+    </div>
+    <div class="editor-actions">
+      <a class="btn btn-ghost btn-sm" href="/dashboard">Dashboard</a>
+      <a class="btn btn-sm" href="/proposals/{{ proposal.id }}/pdf">Download PDF</a>
+    </div>
+  </div>
+
+  {% if saved %}<div class="alert alert-ok">Proposal saved.</div>{% endif %}
+  {% if not usage.is_pro %}
+  <div class="alert alert-warn">Free tier PDF includes a watermark. Upgrade for clean branded exports.</div>
+  {% endif %}
+
+  <form method="post" action="/proposals/{{ proposal.id }}" class="card">
+    <label for="title">Title</label>
+    <input id="title" name="title" value="{{ proposal.title }}" />
+
+    <label for="executive_summary">Executive summary</label>
+    <textarea id="executive_summary" name="executive_summary" rows="5">{{ content.executive_summary }}</textarea>
+
+    <label for="understanding">Understanding</label>
+    <textarea id="understanding" name="understanding" rows="4">{{ content.understanding }}</textarea>
+
+    <label>Scope items</label>
+    <div class="line-items">
+      {% for item in content.scope or [] %}
+      <div class="scope-item">
+        <input name="scope_title" value="{{ item.title if item is mapping else item }}" placeholder="Title" />
+        <input name="scope_detail" value="{{ item.detail if item is mapping else '' }}" placeholder="Detail" />
+      </div>
+      {% else %}
+      <div class="scope-item">
+        <input name="scope_title" placeholder="Title" />
+        <input name="scope_detail" placeholder="Detail" />
+      </div>
+      {% endfor %}
+      <div class="scope-item">
+        <input name="scope_title" placeholder="+ Add scope title" />
+        <input name="scope_detail" placeholder="Detail" />
+      </div>
+    </div>
+
+    <label for="approach">Approach</label>
+    <textarea id="approach" name="approach" rows="4">{{ content.approach }}</textarea>
+
+    <label>Investment line items</label>
+    <div class="line-items">
+      {% for inv in content.investment or [] %}
+      <div class="line-item">
+        <input name="item_name" value="{{ inv.name }}" placeholder="Name" />
+        <input name="item_desc" value="{{ inv.description }}" placeholder="Description" />
+        <input name="item_amount" type="number" value="{{ inv.amount }}" placeholder="Amount" />
+      </div>
+      {% endfor %}
+      <div class="line-item">
+        <input name="item_name" placeholder="+ Add item" />
+        <input name="item_desc" placeholder="Description" />
+        <input name="item_amount" type="number" placeholder="0" />
+      </div>
+    </div>
+    {% if content.investment_total is defined %}
+    <p class="muted">Indicative total: <strong>${{ content.investment_total }}</strong></p>
+    {% endif %}
+
+    <label for="why_us">Why us</label>
+    <textarea id="why_us" name="why_us" rows="3">{{ content.why_us }}</textarea>
+
+    <label for="next_steps">Next steps</label>
+    <textarea id="next_steps" name="next_steps" rows="3">{{ content.next_steps }}</textarea>
+
+    <label for="terms_note">Terms &amp; notes</label>
+    <textarea id="terms_note" name="terms_note" rows="3">{{ content.terms_note }}</textarea>
+
+    <div class="editor-actions">
+      <button class="btn" type="submit">Save changes</button>
+      <a class="btn btn-ghost" href="/proposals/{{ proposal.id }}/pdf">Download PDF</a>
+    </div>
+  </form>
+
+  <form method="post" action="/proposals/{{ proposal.id }}/delete" style="margin-top:1rem;" onsubmit="return confirm('Delete this proposal?');">
+    <button class="btn btn-danger btn-sm" type="submit">Delete proposal</button>
+  </form>
+
+  {% if content.timeline_phases %}
+  <div class="card" style="margin-top:1rem;">
+    <h3 style="margin-top:0;">Timeline (generated — edit via regenerate or JSON later)</h3>
+    <ul class="feature-list">
+      {% for ph in content.timeline_phases %}
+      <li><strong>{{ ph.name }}</strong> — {{ ph.description }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

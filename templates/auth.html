@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == 'signup' %}Sign up{% else %}Log in{% endif %} — B-nexus{% endblock %}
+{% block content %}
+<div class="narrow" style="padding: 2rem 0 3rem;">
+  <div class="card">
+    <h1 style="margin-top:0;">{% if mode == 'signup' %}Create your free account{% else %}Welcome back{% endif %}</h1>
+    <p class="muted">{% if mode == 'signup' %}3 proposals per month on Free. No card required.{% else %}Log in to your B-nexus workspace.{% endif %}</p>
+
+    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+
+    <form method="post" action="{% if mode == 'signup' %}/signup{% else %}/login{% endif %}">
+      <label for="email">Email</label>
+      <input id="email" type="email" name="email" required autocomplete="email" />
+
+      <label for="password">Password</label>
+      <input id="password" type="password" name="password" required minlength="6" autocomplete="{% if mode == 'signup' %}new-password{% else %}current-password{% endif %}" />
+
+      {% if mode == 'signup' %}
+      <label for="company_name">Company / brand name (optional)</label>
+      <input id="company_name" type="text" name="company_name" placeholder="Acme Digital" />
+      {% endif %}
+
+      <button class="btn btn-block" type="submit">
+        {% if mode == 'signup' %}Sign up{% else %}Log in{% endif %}
+      </button>
+    </form>
+
+    <p class="muted" style="margin-top:1rem;margin-bottom:0;">
+      {% if mode == 'signup' %}
+        Already have an account? <a href="/login">Log in</a>
+      {% else %}
+        New here? <a href="/signup">Create a free account</a>
+      {% endif %}
+    </p>
+  </div>
+</div>
+{% endblock %}

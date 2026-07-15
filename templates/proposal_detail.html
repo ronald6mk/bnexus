@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ content.title }} · ProposalForge{% endblock %}
+{% block content %}
+<section class="section">
+  <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center">
+    <div>
+      <h1>{{ content.title }}</h1>
+      <p class="muted">Edit sections, adjust pricing, download PDF.</p>
+    </div>
+    <div class="form-actions">
+      <a class="btn" href="/proposals/{{ row.id }}/pdf">Download PDF</a>
+      <a class="btn secondary" href="/dashboard">Back</a>
+    </div>
+  </div>
+  {% if not user.is_pro %}
+  <div class="alert">Free PDF includes a watermark. <a href="{{ payments.pro }}">Go Pro</a> to remove it.</div>
+  {% endif %}
+
+  <form method="post" action="/proposals/{{ row.id }}/save" class="card">
+    {% for section in content.sections %}
+    <div class="section-block">
+      <label>{{ section.heading }}</label>
+      <textarea name="section_{{ section.id }}">{{ section.body }}</textarea>
+    </div>
+    {% endfor %}
+
+    <h3>Line items</h3>
+    <table>
+      <thead><tr><th>Item</th><th>Qty</th><th>Unit price</th></tr></thead>
+      <tbody>
+        {% for item in content.line_items %}
+        <tr>
+          <td><input name="item_name" value="{{ item.name }}" /></td>
+          <td><input name="item_qty" value="{{ item.qty }}" /></td>
+          <td><input name="item_price" value="{{ item.unit_price }}" /></td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td><input name="item_name" placeholder="Add item..." /></td>
+          <td><input name="item_qty" value="1" /></td>
+          <td><input name="item_price" value="0" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <p><strong>Total:</strong> ${{ '%.2f'|format(content.total) }} {{ content.currency }}</p>
+    <div class="form-actions">
+      <button class="btn" type="submit">Save changes</button>
+      <a class="btn ghost" href="/proposals/{{ row.id }}/pdf">Download PDF</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

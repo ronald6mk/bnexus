@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}B-nexus{% endblock %}</title>
+  <meta name="description" content="B-nexus — branded client proposals & quote PDFs for freelancers and small ICT agencies." />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a class="brand" href="/">B-<span>nexus</span></a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/dfy">DFY</a>
+        {% if user %}
+          <a href="/dashboard">Dashboard</a>
+          <a href="/settings">Settings</a>
+          {% if user.is_pro %}<span class="pill pill-pro">Pro</span>{% else %}<span class="pill">Free</span>{% endif %}
+          <a class="btn btn-sm btn-ghost" href="/logout">Log out</a>
+        {% else %}
+          <a href="/login">Log in</a>
+          <a class="btn btn-sm" href="/signup">Start free</a>
+        {% endif %}
+      </div>
+    </nav>
+  </div>
+
+  {% block content %}{% endblock %}
+
+  <footer class="footer">
+    <div class="container">
+      <strong>B-nexus</strong> v{{ version }} — proposals &amp; quotes for freelancers &amp; ICT agencies.
+      Store: <a href="https://bnexus.lemonsqueezy.com" rel="noopener" target="_blank">bnexus.lemonsqueezy.com</a>
+      · Support: <a href="mailto:ronald6mk@gmail.com">ronald6mk@gmail.com</a>
+      <br />Proposals are not legal advice. Confirm commercial terms in a separate agreement.
+    </div>
+  </footer>
+</body>
+</html>

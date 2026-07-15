@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Settings — ProposalForge{% endblock %}
+{% block content %}
+<div class="narrow" style="padding: 2rem 0 3rem;">
+  <div class="page-header">
+    <h1>Settings</h1>
+    <a class="btn btn-ghost btn-sm" href="/dashboard">Dashboard</a>
+  </div>
+
+  {% if message %}<div class="alert alert-ok">{{ message }}</div>{% endif %}
+
+  <div class="stats">
+    <div class="stat">
+      <strong>{% if usage.is_pro %}Pro{% else %}Free{% endif %}</strong>
+      <span>Plan</span>
+    </div>
+    <div class="stat">
+      <strong>{% if usage.is_pro %}∞{% else %}{{ usage.used_this_month }}/{{ usage.limit }}{% endif %}</strong>
+      <span>This month</span>
+    </div>
+  </div>
+
+  <form method="post" action="/settings" class="card">
+    <label for="company_name">Company / brand name</label>
+    <input id="company_name" name="company_name" value="{{ user.company_name or '' }}" />
+
+    <label for="brand_color">Brand color</label>
+    <input id="brand_color" type="color" name="brand_color" value="{{ user.brand_color or '#1a56db' }}" />
+
+    <label for="sender_name">Sender name</label>
+    <input id="sender_name" name="sender_name" value="{{ user.sender_name or '' }}" />
+
+    <label for="sender_email">Sender email</label>
+    <input id="sender_email" type="email" name="sender_email" value="{{ user.sender_email or user.email or '' }}" />
+
+    <label for="sender_phone">Sender phone</label>
+    <input id="sender_phone" name="sender_phone" value="{{ user.sender_phone or '' }}" />
+
+    <label for="pro_code">Pro unlock code (demo)</label>
+    <input id="pro_code" name="pro_code" placeholder="proposalforge-pro" autocomplete="off" />
+    <p class="muted" style="margin-top:-0.5rem;">Or set <code>is_pro=1</code> in SQLite / <code>ADMIN_PRO_EMAIL</code> env. Payment links: <code>PAYMENT_LINK_PRO</code>, <code>PAYMENT_LINK_LIFETIME</code>.</p>
+
+    <button class="btn" type="submit">Save settings</button>
+  </form>
+</div>
+{% endblock %}

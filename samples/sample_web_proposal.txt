@@ -1,0 +1,9 @@
+Web Development Proposal — Acme Retail
+============================================================
+
+EXECUTIVE SUMMARY
+Northwind Digital is pleased to present this proposal to Acme Retail. This engagement focuses on Discovery, Design, Build, Launch within the Web Development domain. Our objective is to help Jordan Lee achieve: increase online sales; mobile-first experience. Suggested investment range: $5,000 – $15,000. Indicative timeline: 1–2 months.
+
+(This file is a static sample. Live generation writes samples/proposal_<id>.txt after each create.)
+
+Disclaimer: This document is not legal advice.

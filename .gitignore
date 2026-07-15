@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+env/
+data/*.db
+data/dfy_orders.json
+*.log
+.env
+.DS_Store
+samples/*.pdf
+.idea/
+.vscode/

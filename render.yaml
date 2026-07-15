@@ -1,0 +1,18 @@
+# Free public URL via Render.com
+# Docs: https://render.com/docs/free
+services:
+  - type: web
+    name: bnexus
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PROPOSALFORGE_SECRET
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      # Add later after Lemon Squeezy products exist:
+      # PAYMENT_LINK_PRO
+      # PAYMENT_LINK_LIFETIME
+      # PAYMENT_LINK_DFY
