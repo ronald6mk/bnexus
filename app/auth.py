@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import os
 import secrets
 import time
 from typing import Any, Optional
@@ -11,10 +12,20 @@ from typing import Any, Optional
 from fastapi import Request, Response
 
 # In-memory session store: token -> {user_id, email, exp}
+# Note: free-tier restarts clear sessions (re-login). Secret used for cookie bind.
 _SESSIONS: dict[str, dict[str, Any]] = {}
 SESSION_COOKIE = "pf_session"
 SESSION_DAYS = 14
 _PBKDF2_ITERATIONS = 120_000
+
+
+def _app_secret() -> str:
+    """Matches main.app_secret aliases (Render may use PROPOSALFORGESECRET)."""
+    for key in ("PROPOSALFORGE_SECRET", "PROPOSALFORGESECRET", "BNEXUS_SECRET"):
+        val = os.environ.get(key, "").strip()
+        if val:
+            return val
+    return "dev-insecure-change-me"
 
 
 def hash_password(password: str, salt: Optional[str] = None) -> str:
@@ -47,7 +58,14 @@ def verify_password(password: str, stored: str) -> bool:
 
 
 def create_session(user_id: int, email: str) -> str:
-    token = secrets.token_urlsafe(32)
+    raw = secrets.token_urlsafe(32)
+    # Bind token to registered secret so env typo vs underscore still works if rotated carefully
+    sig = hmac.new(
+        _app_secret().encode("utf-8"),
+        raw.encode("utf-8"),
+        hashlib.sha256,
+    ).hexdigest()[:16]
+    token = f"{raw}.{sig}"
     _SESSIONS[token] = {
         "user_id": user_id,
         "email": email,
@@ -64,6 +82,16 @@ def destroy_session(token: Optional[str]) -> None:
 def get_session(token: Optional[str]) -> Optional[dict[str, Any]]:
     if not token:
         return None
+    # Validate secret-bound signature when present
+    if "." in token:
+        raw, sig = token.rsplit(".", 1)
+        expect = hmac.new(
+            _app_secret().encode("utf-8"),
+            raw.encode("utf-8"),
+            hashlib.sha256,
+        ).hexdigest()[:16]
+        if not hmac.compare_digest(sig, expect):
+            return None
     data = _SESSIONS.get(token)
     if not data:
         return None
@@ -79,6 +107,7 @@ def set_session_cookie(response: Response, token: str) -> None:
         value=token,
         httponly=True,
         samesite="lax",
+        secure=True,  # HTTPS on Render
         max_age=SESSION_DAYS * 86400,
         path="/",
     )

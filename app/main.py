@@ -47,6 +47,25 @@ def _env(name: str, default: str = "") -> str:
     return os.environ.get(name, default).strip()
 
 
+def _env_any(*names: str, default: str = "") -> str:
+    """First non-empty env among aliases (supports operator typos / renames)."""
+    for name in names:
+        val = os.environ.get(name, "").strip()
+        if val:
+            return val
+    return default
+
+
+def app_secret() -> str:
+    """Session / signing secret. Accepts PROPOSALFORGE_SECRET or PROPOSALFORGESECRET."""
+    return _env_any(
+        "PROPOSALFORGE_SECRET",
+        "PROPOSALFORGESECRET",  # registered: operator set this on Render
+        "BNEXUS_SECRET",
+        default="dev-insecure-change-me",
+    )
+
+
 def payment_links() -> dict[str, str]:
     return {
         "pro": _env("PAYMENT_LINK_PRO", "#pricing"),
