@@ -1,46 +1,50 @@
 {% extends "base.html" %}
-{% block title %}B-nexus — Client proposals in minutes{% endblock %}
+{% block title %}B-nexus — Win more clients with branded proposals{% endblock %}
 {% block content %}
 <section class="hero container">
-  <div class="badge">B-nexus · Offline demo · No API keys required</div>
-  <h1>Win more work with polished client proposals</h1>
+  <div class="badge">Live · Free to try · No credit card</div>
+  <h1>Stop losing deals to messy Word proposals</h1>
   <p class="lead">
-    <strong>B-nexus</strong> turns a short brief into a branded multi-section proposal and PDF quote —
-    built for freelancers and small ICT agencies. Checkout: <a href="https://bnexus.lemonsqueezy.com" target="_blank" rel="noopener">bnexus.lemonsqueezy.com</a>.
+    <strong>B-nexus</strong> turns a short brief into a clean, branded proposal PDF with scope, timeline, and pricing —
+    built for freelancers, consultants, and small ICT agencies.
   </p>
   <div class="hero-cta">
     {% if user %}
       <a class="btn" href="/proposals/new">New proposal</a>
       <a class="btn btn-ghost" href="/dashboard">Dashboard</a>
     {% else %}
-      <a class="btn" href="/signup">Start free — 3 / month</a>
-      <a class="btn btn-ghost" href="/#pricing">See pricing</a>
+      <a class="btn" href="/signup">Start free — 3 proposals / month</a>
+      <a class="btn btn-ghost" href="/dfy">Hire us to write one ($49)</a>
     {% endif %}
   </div>
+  <p class="muted" style="margin-top:1rem;font-size:0.9rem;">
+    Public app: <a href="https://bnexus-fggr.onrender.com">bnexus-fggr.onrender.com</a>
+    · Store: <a href="https://bnexus.lemonsqueezy.com" target="_blank" rel="noopener">bnexus.lemonsqueezy.com</a>
+  </p>
 </section>
 
 <section class="block container" id="features">
   <h2>How it works</h2>
-  <p class="section-sub">Rule-based templates today. Optional LLM later via env — not required for MVP.</p>
+  <p class="section-sub">From discovery notes to a send-ready PDF in minutes.</p>
   <div class="grid grid-3 howto">
     <div class="card">
-      <h3>Brief</h3>
-      <p>Client, industry (web / IT retainer / consulting / custom ICT), services, goals, budget, timeline, brand.</p>
+      <h3>1. Brief</h3>
+      <p>Client, industry, services, goals, budget, and timeline. Four ready templates: web, IT retainer, consulting, custom ICT.</p>
     </div>
     <div class="card">
-      <h3>Generate</h3>
-      <p>Offline composer builds executive summary, scope, approach, timeline, investment line items, next steps.</p>
+      <h3>2. Generate</h3>
+      <p>B-nexus drafts executive summary, scope, approach, timeline, investment table, and next steps — fully editable.</p>
     </div>
     <div class="card">
-      <h3>Edit &amp; PDF</h3>
-      <p>Tweak sections and line items, download a branded PDF. Free tier includes a watermark.</p>
+      <h3>3. PDF &amp; send</h3>
+      <p>Download a branded PDF. Free plan includes a small watermark; Pro removes it and unlocks unlimited proposals.</p>
     </div>
   </div>
 </section>
 
 <section class="block container" id="pricing">
   <h2>Simple pricing</h2>
-  <p class="section-sub">Checkout links via Lemon Squeezy / Stripe env vars when you’re ready to sell.</p>
+  <p class="section-sub">Start free. Upgrade when proposals become a habit.</p>
   <div class="grid grid-3">
     <div class="card">
       <h3>{{ pricing.free.name }}</h3>
@@ -58,7 +62,9 @@
       <ul class="feature-list">
         {% for f in pricing.pro.features %}<li>{{ f }}</li>{% endfor %}
       </ul>
-      <a class="btn btn-block" href="{{ payment_links.pro }}">Upgrade to Pro</a>
+      <a class="btn btn-block" href="{{ payment_links.pro if payment_links.pro not in ('#pricing', '') else '/dfy' }}">
+        {% if payment_links.pro and payment_links.pro not in ('#pricing', '') %}Upgrade to Pro{% else %}Order DFY while checkout links load{% endif %}
+      </a>
     </div>
     <div class="card">
       <h3>{{ pricing.lifetime.name }}</h3>
@@ -67,33 +73,41 @@
       <ul class="feature-list">
         {% for f in pricing.lifetime.features %}<li>{{ f }}</li>{% endfor %}
       </ul>
-      <a class="btn btn-ghost btn-block" href="{{ payment_links.lifetime }}">Buy lifetime</a>
+      <a class="btn btn-ghost btn-block" href="{{ payment_links.lifetime if payment_links.lifetime not in ('#pricing', '') else 'https://bnexus.lemonsqueezy.com' }}">
+        {% if payment_links.lifetime and payment_links.lifetime not in ('#pricing', '') %}Buy lifetime{% else %}Visit store{% endif %}
+      </a>
     </div>
   </div>
   <div class="card" style="margin-top:1.25rem;">
     <h3>Done-For-You — {{ pricing.dfy.price }}</h3>
-    <p class="muted">Need a human-written proposal? Order DFY ($49 standard / $99 premium). Orders log to <code>data/dfy_orders.json</code> for manual fulfillment — first-cash path without a live processor.</p>
+    <p class="muted">Too busy to write it yourself? We draft a professional proposal from your notes. Fastest path if you need one this week.</p>
     <ul class="feature-list">
       {% for f in pricing.dfy.features %}<li>{{ f }}</li>{% endfor %}
     </ul>
-    <a class="btn btn-accent" href="/dfy">Order DFY proposal</a>
-    {% if payment_links.dfy and payment_links.dfy != '/dfy' %}
-      <a class="btn btn-ghost" href="{{ payment_links.dfy }}" style="margin-left:0.5rem;">Pay online</a>
-    {% endif %}
+    <a class="btn btn-accent" href="/dfy">Request a DFY proposal</a>
+  </div>
+</section>
+
+<section class="block container" id="who">
+  <h2>Who it’s for</h2>
+  <div class="grid grid-2">
+    <div class="card">
+      <h3>Freelancers &amp; consultants</h3>
+      <p>Web, design, IT support, and advisory work — look bigger than a solo inbox full of Word docs.</p>
+    </div>
+    <div class="card">
+      <h3>Small ICT agencies</h3>
+      <p>Consistent structure across every bid. Brand colors and company details on every PDF.</p>
+    </div>
   </div>
 </section>
 
 <section class="block container">
-  <h2>Built for ICT sellers</h2>
-  <div class="grid grid-2">
-    <div class="card">
-      <h3>Industries covered</h3>
-      <p>Web development · IT retainer / managed services · ICT consulting · Custom ICT projects.</p>
-    </div>
-    <div class="card">
-      <h3>Privacy-friendly demo</h3>
-      <p>SQLite local storage, session cookies, password hashing (PBKDF2). No LLM calls unless you add them later.</p>
-    </div>
+  <div class="card" style="text-align:center;">
+    <h2 style="margin-top:0;">Ready to send a better proposal today?</h2>
+    <p class="muted">Create a free account — no card required.</p>
+    <a class="btn" href="/signup">Start free</a>
+    <a class="btn btn-ghost" href="/dfy" style="margin-left:0.5rem;">Or order DFY $49</a>
   </div>
 </section>
 {% endblock %}

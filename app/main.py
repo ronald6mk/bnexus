@@ -135,8 +135,7 @@ def _flash_ctx(request: Request, **extra: Any) -> dict[str, Any]:
 # ---------- Health ----------
 
 
-@app.get("/api/health")
-def api_health() -> dict[str, Any]:
+def _health_payload() -> dict[str, Any]:
     secret_set = bool(
         _env_any("PROPOSALFORGE_SECRET", "PROPOSALFORGESECRET", "BNEXUS_SECRET")
     )
@@ -156,11 +155,18 @@ def api_health() -> dict[str, Any]:
     }
 
 
+@app.api_route("/api/health", methods=["GET", "HEAD"])
+def api_health() -> JSONResponse:
+    return JSONResponse(_health_payload())
+
+
 # ---------- Public pages ----------
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.api_route("/", methods=["GET", "HEAD"], response_class=HTMLResponse)
 def landing(request: Request) -> HTMLResponse:
+    if request.method == "HEAD":
+        return HTMLResponse("", status_code=200)
     return templates.TemplateResponse(
         "landing.html",
         _flash_ctx(request, page="landing"),
@@ -658,6 +664,16 @@ def dfy_submit(
 ):
     package = package if package in ("standard", "premium") else "standard"
     price = 49 if package == "standard" else 99
+    if not name.strip() or "@" not in email or not client_context.strip():
+        return templates.TemplateResponse(
+            "dfy.html",
+            _flash_ctx(
+                request,
+                success=None,
+                error="Please fill name, a valid email, and the client / project context.",
+            ),
+            status_code=400,
+        )
     order = {
         "id": datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S"),
         "name": name.strip(),
@@ -668,7 +684,7 @@ def dfy_submit(
         "client_context": client_context.strip(),
         "notes": notes.strip(),
         "status": "new",
-        "payment_note": "Manual — confirm payment offline / Lemon Squeezy link when configured",
+        "payment_note": "Confirm via Lemon Squeezy or mobile money / bank transfer",
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
     DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -681,14 +697,20 @@ def dfy_submit(
     orders.append(order)
     DFY_ORDERS_PATH.write_text(json.dumps(orders, indent=2), encoding="utf-8")
     track("dfy", package=package, price_usd=price)
+    pay = payment_links().get("dfy") or "/dfy"
+    pay_hint = (
+        f' <a href="{pay}">Complete payment here</a>.'
+        if pay and pay != "/dfy" and pay != "#pricing"
+        else " We will email you a payment link or Mobile Money instructions."
+    )
     return templates.TemplateResponse(
         "dfy.html",
         _flash_ctx(
             request,
             success=(
-                f"DFY order logged (#{order['id']}, ${price} {package}). "
-                f"We'll follow up at {order['email']}. "
-                "Payment: use the configured PAYMENT_LINK_DFY or settle manually."
+                f"Thanks {order['name']}! Your Done-For-You order is in "
+                f"(#{order['id']}, ${price} {package}). "
+                f"We will contact {order['email']} within 1 business day.{pay_hint}"
             ),
             error=None,
         ),

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ code }} — B-nexus{% endblock %}
+{% block content %}
+<div class="narrow" style="padding:3rem 0;">
+  <div class="card" style="text-align:center;">
+    <div class="badge">Error {{ code }}</div>
+    <h1 style="margin-top:0.75rem;">{{ title }}</h1>
+    <p class="muted">{{ message }}</p>
+    <div class="hero-cta" style="justify-content:center;">
+      <a class="btn" href="/">Home</a>
+      <a class="btn btn-ghost" href="/dashboard">Dashboard</a>
+      <a class="btn btn-ghost" href="/dfy">DFY order</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

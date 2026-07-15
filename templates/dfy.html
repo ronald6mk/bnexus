@@ -1,30 +1,31 @@
 {% extends "base.html" %}
-{% block title %}Done-For-You proposal — ProposalForge{% endblock %}
+{% block title %}Done-For-You proposal — B-nexus{% endblock %}
 {% block content %}
 <div class="narrow" style="padding: 2rem 0 3rem;">
   <div class="card">
-    <h1 style="margin-top:0;">Done-For-You proposal order</h1>
+    <h1 style="margin-top:0;">Done-For-You proposal</h1>
     <p class="muted">
-      We write a client-ready proposal from your brief. <strong>$49</strong> standard · <strong>$99</strong> premium (includes discovery notes).
-      Orders are logged to <code>data/dfy_orders.json</code> for manual fulfillment — first cash without a live payment processor.
+      We write a client-ready proposal from your brief.
+      <strong>$49</strong> standard · <strong>$99</strong> premium (deeper notes).
+      Typical turnaround: within 1 business day after payment confirmation.
     </p>
 
-    {% if success %}<div class="alert alert-ok">{{ success }}</div>{% endif %}
+    {% if success %}<div class="alert alert-ok">{{ success|safe }}</div>{% endif %}
     {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
 
     <form method="post" action="/dfy">
       <div class="form-row">
         <div>
           <label for="name">Your name *</label>
-          <input id="name" name="name" required />
+          <input id="name" name="name" required autocomplete="name" />
         </div>
         <div>
           <label for="email">Email *</label>
-          <input id="email" type="email" name="email" required />
+          <input id="email" type="email" name="email" required autocomplete="email" />
         </div>
       </div>
       <label for="company">Your company</label>
-      <input id="company" name="company" />
+      <input id="company" name="company" autocomplete="organization" />
 
       <label for="package">Package</label>
       <select id="package" name="package">
@@ -36,14 +37,15 @@
       <textarea id="client_context" name="client_context" required placeholder="Who is the client? What services? Budget band? Deadline?"></textarea>
 
       <label for="notes">Extra notes</label>
-      <textarea id="notes" name="notes" placeholder="Tone, differentiators, must-include clauses…"></textarea>
+      <textarea id="notes" name="notes" placeholder="Tone, differentiators, must-include items…"></textarea>
 
-      <button class="btn btn-accent btn-block" type="submit">Submit DFY order</button>
+      <button class="btn btn-accent btn-block" type="submit">Submit DFY request</button>
     </form>
     <p class="muted" style="margin-bottom:0;margin-top:1rem;font-size:0.85rem;">
-      After submit, settle payment via your configured <code>PAYMENT_LINK_DFY</code> or offline invoice.
-      {% if payment_links.dfy and payment_links.dfy != '/dfy' %}
-        <a href="{{ payment_links.dfy }}">Open payment link</a>
+      Support: <a href="mailto:ronald6mk@gmail.com">ronald6mk@gmail.com</a>
+      · Store: <a href="https://bnexus.lemonsqueezy.com" target="_blank" rel="noopener">bnexus.lemonsqueezy.com</a>
+      {% if payment_links.dfy and payment_links.dfy not in ('/dfy', '#pricing', '') %}
+        · <a href="{{ payment_links.dfy }}">Pay online</a>
       {% endif %}
     </p>
   </div>
