@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ sample.title }} — Sample — B-nexus{% endblock %}
+{% block content %}
+<div class="mid" style="padding:1rem 0 3.5rem;">
+  <div class="page-header reveal">
+    <div>
+      <span class="badge" style="margin-bottom:0.5rem;">Sample proposal</span>
+      <h1>{{ sample.title }}</h1>
+      <p class="sub">Illustrative example for {{ sample.industry_label }}. Not a real client engagement.</p>
+    </div>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+      <a class="btn btn-ghost btn-sm" href="/samples">All samples</a>
+      <a class="btn btn-sm" href="/signup">Create my own</a>
+    </div>
+  </div>
+
+  <article class="preview-frame reveal reveal-delay-1" style="animation:none;">
+    <div class="preview-chrome"><i></i><i></i><i></i>
+      <span class="muted" style="margin-left:0.5rem;font-size:0.78rem;">B-nexus sample PDF preview</span>
+    </div>
+    <div class="preview-body" style="padding:1.75rem 1.6rem 2rem;">
+      <div class="preview-bar" style="background:{{ sample.color }};"></div>
+      <p class="preview-title" style="font-size:1.35rem;">{{ sample.title }}</p>
+      <p class="preview-meta">
+        Prepared for <strong>{{ sample.client }}</strong>
+        · {{ sample.sender }}
+        · {{ sample.date }}
+      </p>
+
+      {% for section in sample.sections %}
+      <div class="preview-section" style="margin-bottom:1.25rem;">
+        <h4 style="color:{{ sample.color }};">{{ section.heading }}</h4>
+        <p style="white-space:pre-line;">{{ section.body }}</p>
+      </div>
+      {% endfor %}
+
+      <div class="preview-section">
+        <h4 style="color:{{ sample.color }};">Investment</h4>
+        <table class="preview-table">
+          <thead>
+            <tr><th>Deliverable</th><th>Qty</th><th style="text-align:right;">Amount</th></tr>
+          </thead>
+          <tbody>
+            {% for item in sample.line_items %}
+            <tr>
+              <td>{{ item.name }}</td>
+              <td>{{ item.qty }}</td>
+              <td style="text-align:right;">${{ '%.2f'|format(item.total) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="preview-total">Total · ${{ '%.2f'|format(sample.total_num) }} USD</div>
+      </div>
+
+      <p class="muted" style="margin-top:1.5rem;font-size:0.8rem;border-top:1px solid var(--line);padding-top:0.85rem;">
+        This document is a sample business proposal template for demonstration. It is not legal advice and does not form a binding contract.
+      </p>
+    </div>
+  </article>
+
+  <div style="text-align:center;margin-top:1.75rem;" class="reveal">
+    <a class="btn" href="/proposals/new">Build a proposal like this</a>
+  </div>
+</div>
+{% endblock %}

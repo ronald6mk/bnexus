@@ -1,52 +1,111 @@
 {% extends "base.html" %}
 {% block title %}B-nexus — Win more clients with branded proposals{% endblock %}
 {% block content %}
-<section class="hero container">
-  <div class="badge">Live · Free to try · No credit card</div>
-  <h1>Stop losing deals to messy Word proposals</h1>
-  <p class="lead">
-    <strong>B-nexus</strong> turns a short brief into a clean, branded proposal PDF with scope, timeline, and pricing —
-    built for freelancers, consultants, and small ICT agencies.
-  </p>
-  <div class="hero-cta">
-    {% if user %}
-      <a class="btn" href="/proposals/new">New proposal</a>
-      <a class="btn btn-ghost" href="/dashboard">Dashboard</a>
-    {% else %}
-      <a class="btn" href="/signup">Start free — 3 proposals / month</a>
-      <a class="btn btn-ghost" href="/dfy">Hire us to write one ($49)</a>
-    {% endif %}
+<section class="container hero">
+  <div class="reveal">
+    <div class="badge"><span class="badge-dot"></span> Trusted by freelancers &amp; ICT teams</div>
+    <h1>Proposals that look like you already won the deal</h1>
+    <p class="lead">
+      Turn a short client brief into a polished PDF with scope, timeline, and investment —
+      in minutes, not hours. Built for freelancers, consultants, and small agencies.
+    </p>
+    <div class="hero-cta">
+      {% if user %}
+        <a class="btn" href="/proposals/new">Create a proposal</a>
+        <a class="btn btn-ghost" href="/dashboard">Open dashboard</a>
+      {% else %}
+        <a class="btn" href="/signup">Start free</a>
+        <a class="btn btn-ghost" href="/samples">See examples</a>
+      {% endif %}
+    </div>
+    <div class="trust-strip" style="justify-content:flex-start;margin-top:1.25rem;padding:0;">
+      <span>Free plan available</span>
+      <span>Branded PDF export</span>
+      <span>No credit card to try</span>
+    </div>
   </div>
-  <p class="muted" style="margin-top:1rem;font-size:0.9rem;">
-    Public app: <a href="https://bnexus-fggr.onrender.com">bnexus-fggr.onrender.com</a>
-    · Store: <a href="https://bnexus.lemonsqueezy.com" target="_blank" rel="noopener">bnexus.lemonsqueezy.com</a>
-  </p>
+
+  <div class="preview-frame reveal reveal-delay-2" aria-hidden="true">
+    <div class="preview-chrome"><i></i><i></i><i></i></div>
+    <div class="preview-body">
+      <div class="preview-bar"></div>
+      <p class="preview-title">Website Redesign Proposal</p>
+      <p class="preview-meta">Prepared for Horizon Retail · Northstar Studio · 2026</p>
+      <div class="preview-section">
+        <h4>Understanding</h4>
+        <p>You need a faster storefront that converts mobile traffic and reduces support tickets after launch.</p>
+      </div>
+      <div class="preview-section">
+        <h4>Investment</h4>
+        <table class="preview-table">
+          <thead><tr><th>Item</th><th>Total</th></tr></thead>
+          <tbody>
+            <tr><td>Discovery &amp; UX</td><td>$1,200</td></tr>
+            <tr><td>Design system</td><td>$2,400</td></tr>
+            <tr><td>Build &amp; launch</td><td>$4,800</td></tr>
+          </tbody>
+        </table>
+        <div class="preview-total">Total · $8,400</div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section class="block container" id="features">
-  <h2>How it works</h2>
-  <p class="section-sub">From discovery notes to a send-ready PDF in minutes.</p>
+  <h2 class="reveal">From notes to a client-ready PDF</h2>
+  <p class="section-sub reveal">Three steps. No design skills required.</p>
   <div class="grid grid-3 howto">
-    <div class="card">
-      <h3>1. Brief</h3>
-      <p>Client, industry, services, goals, budget, and timeline. Four ready templates: web, IT retainer, consulting, custom ICT.</p>
+    <div class="card step-card reveal reveal-delay-1">
+      <h3>Capture the brief</h3>
+      <p>Client, industry, services, goals, budget, and timeline — structured fields so nothing important is missing.</p>
     </div>
-    <div class="card">
-      <h3>2. Generate</h3>
-      <p>B-nexus drafts executive summary, scope, approach, timeline, investment table, and next steps — fully editable.</p>
+    <div class="card step-card reveal reveal-delay-2">
+      <h3>Generate &amp; refine</h3>
+      <p>B-nexus drafts executive summary, scope, approach, timeline, and pricing. Edit any line before you send.</p>
     </div>
-    <div class="card">
-      <h3>3. PDF &amp; send</h3>
-      <p>Download a branded PDF. Free plan includes a small watermark; Pro removes it and unlocks unlimited proposals.</p>
+    <div class="card step-card reveal reveal-delay-3">
+      <h3>Export branded PDF</h3>
+      <p>Your company name and brand color on a clean document clients can open on any device.</p>
     </div>
   </div>
 </section>
 
-<section class="block container" id="pricing">
-  <h2>Simple pricing</h2>
-  <p class="section-sub">Start free. Upgrade when proposals become a habit.</p>
+<section class="block container" id="examples">
+  <h2 class="reveal">See what clients receive</h2>
+  <p class="section-sub reveal">Real structure. Real pricing tables. Browse full sample proposals.</p>
   <div class="grid grid-3">
-    <div class="card">
+    <article class="card sample-card reveal reveal-delay-1">
+      <span class="sample-tag">Web project</span>
+      <h3>Marketing site rebuild</h3>
+      <p>Discovery, design, build, and launch for a growth-stage brand.</p>
+      <div class="sample-lines"><span></span><span></span><span></span><span></span></div>
+      <a class="btn btn-ghost btn-sm" href="/samples/web">View sample</a>
+    </article>
+    <article class="card sample-card reveal reveal-delay-2">
+      <span class="sample-tag">IT retainer</span>
+      <h3>Managed support package</h3>
+      <p>Monthly monitoring, helpdesk, patching, and quarterly reviews.</p>
+      <div class="sample-lines"><span></span><span></span><span></span><span></span></div>
+      <a class="btn btn-ghost btn-sm" href="/samples/it">View sample</a>
+    </article>
+    <article class="card sample-card reveal reveal-delay-3">
+      <span class="sample-tag">Consulting</span>
+      <h3>Digital strategy engagement</h3>
+      <p>Audit, roadmap workshop, and 30-day advisory support.</p>
+      <div class="sample-lines"><span></span><span></span><span></span><span></span></div>
+      <a class="btn btn-ghost btn-sm" href="/samples/consulting">View sample</a>
+    </article>
+  </div>
+  <p style="text-align:center;margin-top:1.5rem;" class="reveal">
+    <a class="btn" href="/samples">Browse all examples</a>
+  </p>
+</section>
+
+<section class="block container" id="pricing">
+  <h2 class="reveal">Simple, transparent pricing</h2>
+  <p class="section-sub reveal">Start free. Upgrade when proposals become part of how you sell.</p>
+  <div class="grid grid-3">
+    <div class="card reveal reveal-delay-1">
       <h3>{{ pricing.free.name }}</h3>
       <div class="price">{{ pricing.free.price }}<small>{{ pricing.free.period }}</small></div>
       <p>{{ pricing.free.limit }}</p>
@@ -55,59 +114,43 @@
       </ul>
       <a class="btn btn-ghost btn-block" href="/signup">Get started</a>
     </div>
-    <div class="card featured">
+    <div class="card featured reveal reveal-delay-2">
       <h3>{{ pricing.pro.name }}</h3>
       <div class="price">{{ pricing.pro.price }}<small>{{ pricing.pro.period }}</small></div>
       <p>{{ pricing.pro.limit }}</p>
       <ul class="feature-list">
         {% for f in pricing.pro.features %}<li>{{ f }}</li>{% endfor %}
       </ul>
-      <a class="btn btn-block" href="{{ payment_links.pro if payment_links.pro not in ('#pricing', '') else '/dfy' }}">
-        {% if payment_links.pro and payment_links.pro not in ('#pricing', '') %}Upgrade to Pro{% else %}Order DFY while checkout links load{% endif %}
-      </a>
+      <a class="btn btn-block" href="{% if payment_links.pro and payment_links.pro not in ('#pricing','') %}{{ payment_links.pro }}{% else %}https://bnexus.lemonsqueezy.com{% endif %}">Upgrade to Pro</a>
     </div>
-    <div class="card">
+    <div class="card reveal reveal-delay-3">
       <h3>{{ pricing.lifetime.name }}</h3>
       <div class="price">{{ pricing.lifetime.price }}<small>{{ pricing.lifetime.period }}</small></div>
       <p>{{ pricing.lifetime.limit }}</p>
       <ul class="feature-list">
         {% for f in pricing.lifetime.features %}<li>{{ f }}</li>{% endfor %}
       </ul>
-      <a class="btn btn-ghost btn-block" href="{{ payment_links.lifetime if payment_links.lifetime not in ('#pricing', '') else 'https://bnexus.lemonsqueezy.com' }}">
-        {% if payment_links.lifetime and payment_links.lifetime not in ('#pricing', '') %}Buy lifetime{% else %}Visit store{% endif %}
-      </a>
+      <a class="btn btn-ghost btn-block" href="{% if payment_links.lifetime and payment_links.lifetime not in ('#pricing','') %}{{ payment_links.lifetime }}{% else %}https://bnexus.lemonsqueezy.com{% endif %}">Get lifetime</a>
     </div>
   </div>
-  <div class="card" style="margin-top:1.25rem;">
-    <h3>Done-For-You — {{ pricing.dfy.price }}</h3>
-    <p class="muted">Too busy to write it yourself? We draft a professional proposal from your notes. Fastest path if you need one this week.</p>
-    <ul class="feature-list">
-      {% for f in pricing.dfy.features %}<li>{{ f }}</li>{% endfor %}
-    </ul>
-    <a class="btn btn-accent" href="/dfy">Request a DFY proposal</a>
+
+  <div class="card reveal" style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;">
+    <div>
+      <h3 style="margin:0 0 0.35rem;">Prefer we write it for you?</h3>
+      <p class="muted" style="margin:0;">Done-for-you proposals from $49 — you send the brief, we deliver the PDF.</p>
+    </div>
+    <a class="btn btn-accent" href="/dfy">Request done-for-you</a>
   </div>
 </section>
 
-<section class="block container" id="who">
-  <h2>Who it’s for</h2>
-  <div class="grid grid-2">
-    <div class="card">
-      <h3>Freelancers &amp; consultants</h3>
-      <p>Web, design, IT support, and advisory work — look bigger than a solo inbox full of Word docs.</p>
+<section class="container" style="padding-bottom:3.5rem;">
+  <div class="cta-band reveal">
+    <h2>Send your next proposal with confidence</h2>
+    <p>Create a free account and export your first branded PDF today.</p>
+    <div class="hero-cta" style="justify-content:center;">
+      <a class="btn" href="/signup">Start free</a>
+      <a class="btn btn-ghost" href="/samples">View samples first</a>
     </div>
-    <div class="card">
-      <h3>Small ICT agencies</h3>
-      <p>Consistent structure across every bid. Brand colors and company details on every PDF.</p>
-    </div>
-  </div>
-</section>
-
-<section class="block container">
-  <div class="card" style="text-align:center;">
-    <h2 style="margin-top:0;">Ready to send a better proposal today?</h2>
-    <p class="muted">Create a free account — no card required.</p>
-    <a class="btn" href="/signup">Start free</a>
-    <a class="btn btn-ghost" href="/dfy" style="margin-left:0.5rem;">Or order DFY $49</a>
   </div>
 </section>
 {% endblock %}

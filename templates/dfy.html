@@ -1,53 +1,80 @@
 {% extends "base.html" %}
-{% block title %}Done-For-You proposal — B-nexus{% endblock %}
+{% block title %}Done-for-you proposal — B-nexus{% endblock %}
 {% block content %}
-<div class="narrow" style="padding: 2rem 0 3rem;">
-  <div class="card">
-    <h1 style="margin-top:0;">Done-For-You proposal</h1>
-    <p class="muted">
-      We write a client-ready proposal from your brief.
-      <strong>$49</strong> standard · <strong>$99</strong> premium (deeper notes).
-      Typical turnaround: within 1 business day after payment confirmation.
-    </p>
+<div class="mid" style="padding: 1rem 0 3.5rem;">
+  <div class="page-header reveal" style="margin-bottom:0.5rem;">
+    <div>
+      <h1>Done-for-you proposal</h1>
+      <p class="sub">You share the client brief. We deliver a polished PDF you can send.</p>
+    </div>
+    <a class="btn btn-ghost btn-sm" href="/samples">See examples first</a>
+  </div>
 
+  <div class="form-card reveal reveal-delay-1">
     {% if success %}<div class="alert alert-ok">{{ success|safe }}</div>{% endif %}
     {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
 
-    <form method="post" action="/dfy">
+    <form method="post" action="/dfy" id="dfy-form">
+      <p class="form-section-title" style="margin-top:0;border:0;padding:0;">Choose a package</p>
+      <div class="package-cards">
+        <label class="package-option">
+          <input type="radio" name="package" value="standard" checked />
+          <strong>Standard · $49</strong>
+          <span>Full proposal PDF from your brief · ~1 business day</span>
+        </label>
+        <label class="package-option">
+          <input type="radio" name="package" value="premium" />
+          <strong>Premium · $99</strong>
+          <span>Deeper scope notes + pricing options · priority turnaround</span>
+        </label>
+      </div>
+
+      <p class="form-section-title">Your details</p>
       <div class="form-row">
-        <div>
-          <label for="name">Your name *</label>
-          <input id="name" name="name" required autocomplete="name" />
+        <div class="field">
+          <label for="name">Full name</label>
+          <input id="name" name="name" required autocomplete="name" placeholder="Jordan Lee" />
         </div>
-        <div>
-          <label for="email">Email *</label>
-          <input id="email" type="email" name="email" required autocomplete="email" />
+        <div class="field">
+          <label for="email">Work email</label>
+          <input id="email" type="email" name="email" required autocomplete="email" placeholder="you@company.com" />
         </div>
       </div>
-      <label for="company">Your company</label>
-      <input id="company" name="company" autocomplete="organization" />
+      <div class="field">
+        <label for="company">Business or agency name</label>
+        <input id="company" name="company" autocomplete="organization" placeholder="Lee Digital Agency" />
+        <span class="hint">Shown as the sender on the proposal you deliver to your client.</span>
+      </div>
 
-      <label for="package">Package</label>
-      <select id="package" name="package">
-        <option value="standard">Standard — $49</option>
-        <option value="premium">Premium — $99</option>
-      </select>
+      <p class="form-section-title">About the engagement</p>
+      <div class="field">
+        <label for="client_context">Client &amp; project brief</label>
+        <textarea id="client_context" name="client_context" required placeholder="Who is the client? What services are you offering? Approximate budget and deadline? Any must-win points?"></textarea>
+        <span class="hint">The more context you share, the stronger the proposal.</span>
+      </div>
+      <div class="field">
+        <label for="notes">Preferences (optional)</label>
+        <textarea id="notes" name="notes" placeholder="Tone (formal / friendly), brand color, sections to emphasize…"></textarea>
+      </div>
 
-      <label for="client_context">Client / project context *</label>
-      <textarea id="client_context" name="client_context" required placeholder="Who is the client? What services? Budget band? Deadline?"></textarea>
-
-      <label for="notes">Extra notes</label>
-      <textarea id="notes" name="notes" placeholder="Tone, differentiators, must-include items…"></textarea>
-
-      <button class="btn btn-accent btn-block" type="submit">Submit DFY request</button>
+      <button class="btn btn-block btn-accent" type="submit">Submit request</button>
+      <p class="muted" style="text-align:center;margin:1rem 0 0;font-size:0.85rem;">
+        We confirm by email within one business day.
+        Questions? <a href="mailto:ronald6mk@gmail.com">ronald6mk@gmail.com</a>
+      </p>
     </form>
-    <p class="muted" style="margin-bottom:0;margin-top:1rem;font-size:0.85rem;">
-      Support: <a href="mailto:ronald6mk@gmail.com">ronald6mk@gmail.com</a>
-      · Store: <a href="https://bnexus.lemonsqueezy.com" target="_blank" rel="noopener">bnexus.lemonsqueezy.com</a>
-      {% if payment_links.dfy and payment_links.dfy not in ('/dfy', '#pricing', '') %}
-        · <a href="{{ payment_links.dfy }}">Pay online</a>
-      {% endif %}
-    </p>
   </div>
 </div>
+<script>
+  document.querySelectorAll('.package-option').forEach(function (el) {
+    el.addEventListener('click', function () {
+      document.querySelectorAll('.package-option').forEach(function (n) { n.classList.remove('active'); });
+      el.classList.add('active');
+      var input = el.querySelector('input');
+      if (input) input.checked = true;
+    });
+  });
+  var checked = document.querySelector('.package-option input:checked');
+  if (checked) checked.closest('.package-option').classList.add('active');
+</script>
 {% endblock %}

@@ -1,46 +1,76 @@
 {% extends "base.html" %}
 {% block title %}Settings — B-nexus{% endblock %}
 {% block content %}
-<div class="narrow" style="padding: 2rem 0 3rem;">
-  <div class="page-header">
-    <h1>Settings</h1>
-    <a class="btn btn-ghost btn-sm" href="/dashboard">Dashboard</a>
+<div class="mid" style="padding: 0.5rem 0 3.5rem;">
+  <div class="page-header reveal">
+    <div>
+      <h1>Account settings</h1>
+      <p class="sub">Update your brand details for every proposal PDF.</p>
+    </div>
+    <a class="btn btn-ghost btn-sm" href="/dashboard">Back to dashboard</a>
   </div>
 
-  {% if message %}<div class="alert alert-ok">{{ message }}</div>{% endif %}
+  {% if message %}<div class="alert alert-ok reveal">{{ message }}</div>{% endif %}
 
-  <div class="stats">
+  <div class="stats reveal">
     <div class="stat">
       <strong>{% if usage.is_pro %}Pro{% else %}Free{% endif %}</strong>
-      <span>Plan</span>
+      <span>Current plan</span>
     </div>
     <div class="stat">
-      <strong>{% if usage.is_pro %}∞{% else %}{{ usage.used_this_month }}/{{ usage.limit }}{% endif %}</strong>
-      <span>This month</span>
+      <strong>{% if usage.is_pro %}Unlimited{% else %}{{ usage.used_this_month }} / {{ usage.limit }}{% endif %}</strong>
+      <span>Proposals this month</span>
+    </div>
+    <div class="stat">
+      <strong>{{ user.email }}</strong>
+      <span>Signed in as</span>
     </div>
   </div>
 
-  <form method="post" action="/settings" class="card">
-    <label for="company_name">Company / brand name</label>
-    <input id="company_name" name="company_name" value="{{ user.company_name or '' }}" />
+  <form method="post" action="/settings" class="form-card reveal reveal-delay-1">
+    <p class="form-section-title" style="margin-top:0;border:0;padding:0;">Brand on PDFs</p>
 
-    <label for="brand_color">Brand color</label>
-    <input id="brand_color" type="color" name="brand_color" value="{{ user.brand_color or '#1a56db' }}" />
+    <div class="field">
+      <label for="company_name">Company name</label>
+      <input id="company_name" name="company_name" value="{{ user.company_name or '' }}" placeholder="Northstar Digital" autocomplete="organization" />
+      <span class="hint">Appears in the proposal header and cover.</span>
+    </div>
 
-    <label for="sender_name">Sender name</label>
-    <input id="sender_name" name="sender_name" value="{{ user.sender_name or '' }}" />
+    <div class="form-row">
+      <div class="field">
+        <label for="brand_color">Brand color</label>
+        <input id="brand_color" type="color" name="brand_color" value="{{ user.brand_color or '#0d9488' }}" />
+      </div>
+      <div class="field">
+        <label for="sender_name">Your full name</label>
+        <input id="sender_name" name="sender_name" value="{{ user.sender_name or '' }}" placeholder="Alex Morgan" autocomplete="name" />
+      </div>
+    </div>
 
-    <label for="sender_email">Sender email</label>
-    <input id="sender_email" type="email" name="sender_email" value="{{ user.sender_email or user.email or '' }}" />
+    <div class="form-row">
+      <div class="field">
+        <label for="sender_email">Contact email on proposals</label>
+        <input id="sender_email" type="email" name="sender_email" value="{{ user.sender_email or user.email or '' }}" autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="sender_phone">Phone (optional)</label>
+        <input id="sender_phone" type="tel" name="sender_phone" value="{{ user.sender_phone or '' }}" placeholder="+1 555 0100" autocomplete="tel" />
+      </div>
+    </div>
 
-    <label for="sender_phone">Sender phone</label>
-    <input id="sender_phone" name="sender_phone" value="{{ user.sender_phone or '' }}" />
+    {% if not usage.is_pro %}
+    <p class="form-section-title">Upgrade</p>
+    <div class="field">
+      <label for="pro_code">License or promo code (optional)</label>
+      <input id="pro_code" name="pro_code" placeholder="Enter code if you have one" autocomplete="off" />
+      <span class="hint">Or <a href="{% if payment_links.pro and payment_links.pro not in ('#pricing','') %}{{ payment_links.pro }}{% else %}https://bnexus.lemonsqueezy.com{% endif %}">upgrade to Pro</a> for unlimited proposals without watermark.</span>
+    </div>
+    {% else %}
+    <input type="hidden" name="pro_code" value="" />
+    <div class="alert alert-ok" style="margin-top:1rem;">Your account is on Pro — unlimited proposals, no watermark.</div>
+    {% endif %}
 
-    <label for="pro_code">Pro unlock code (demo)</label>
-    <input id="pro_code" name="pro_code" placeholder="proposalforge-pro" autocomplete="off" />
-    <p class="muted" style="margin-top:-0.5rem;">Or set <code>is_pro=1</code> in SQLite / <code>ADMIN_PRO_EMAIL</code> env. Payment links: <code>PAYMENT_LINK_PRO</code>, <code>PAYMENT_LINK_LIFETIME</code>.</p>
-
-    <button class="btn" type="submit">Save settings</button>
+    <button class="btn" type="submit" style="margin-top:0.5rem;">Save changes</button>
   </form>
 </div>
 {% endblock %}

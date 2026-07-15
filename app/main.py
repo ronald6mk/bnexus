@@ -128,8 +128,128 @@ def _flash_ctx(request: Request, **extra: Any) -> dict[str, Any]:
         "budget_ranges": BUDGET_RANGES,
         "timelines": TIMELINES,
         "version": __version__,
+        "year": datetime.now(timezone.utc).year,
         **extra,
     }
+
+
+# Public sample catalogue (marketing — no account required)
+SAMPLE_CATALOGUE: list[dict[str, Any]] = [
+    {
+        "id": "web",
+        "tag": "Web project",
+        "title": "Marketing site rebuild",
+        "blurb": "Discovery, design system, build, and launch for a growth-stage retailer.",
+        "total": "$8,400",
+        "href": "/samples/web",
+        "industry_label": "Web development",
+        "client": "Horizon Retail",
+        "sender": "Northstar Studio",
+        "date": "March 2026",
+        "color": "#0d9488",
+        "total_num": 8400.0,
+        "sections": [
+            {
+                "heading": "Understanding your needs",
+                "body": "Horizon Retail needs a faster, mobile-first marketing site that converts more visitors into store visits and reduces post-launch support tickets.",
+            },
+            {
+                "heading": "Proposed scope",
+                "body": "• Discovery workshop and success metrics\n• UI design for key conversion pages\n• Frontend build and CMS integration\n• QA, launch support, and handoff training",
+            },
+            {
+                "heading": "Timeline",
+                "body": "Estimated 5–6 weeks across discovery, design, build, and launch with weekly demos.",
+            },
+            {
+                "heading": "Next steps",
+                "body": "1. Confirm this proposal meets your goals\n2. Schedule kickoff\n3. Share brand assets and access\n4. We begin after written confirmation",
+            },
+        ],
+        "line_items": [
+            {"name": "Discovery & UX workshop", "qty": 1, "total": 1200.0},
+            {"name": "Design system & key pages", "qty": 1, "total": 2400.0},
+            {"name": "Frontend build & CMS", "qty": 1, "total": 4200.0},
+            {"name": "QA, launch & training", "qty": 1, "total": 600.0},
+        ],
+    },
+    {
+        "id": "it",
+        "tag": "IT retainer",
+        "title": "Managed support package",
+        "blurb": "Monthly monitoring, helpdesk, patching, and quarterly optimization reviews.",
+        "total": "$1,200 / mo",
+        "href": "/samples/it",
+        "industry_label": "IT retainer",
+        "client": "Brightpath Clinic",
+        "sender": "Clearline IT",
+        "date": "March 2026",
+        "color": "#0369a1",
+        "total_num": 1200.0,
+        "sections": [
+            {
+                "heading": "Understanding your needs",
+                "body": "Brightpath needs predictable IT support with clear response times so clinical staff stay productive.",
+            },
+            {
+                "heading": "Proposed scope",
+                "body": "• Business-hours helpdesk\n• Endpoint monitoring and patching\n• Backup verification\n• Quarterly health review and roadmap",
+            },
+            {
+                "heading": "Timeline",
+                "body": "Onboarding in week one; retainer runs monthly with a 30-day notice period.",
+            },
+            {
+                "heading": "Next steps",
+                "body": "Confirm seat count, share asset inventory, and schedule onboarding.",
+            },
+        ],
+        "line_items": [
+            {"name": "Monthly monitoring", "qty": 1, "total": 350.0},
+            {"name": "Helpdesk (business hours)", "qty": 1, "total": 400.0},
+            {"name": "Security patching & backups", "qty": 1, "total": 250.0},
+            {"name": "Quarterly optimization review", "qty": 1, "total": 200.0},
+        ],
+    },
+    {
+        "id": "consulting",
+        "tag": "Consulting",
+        "title": "Digital strategy engagement",
+        "blurb": "Audit, recommendations, roadmap workshop, and 30-day advisory support.",
+        "total": "$3,800",
+        "href": "/samples/consulting",
+        "industry_label": "ICT consulting",
+        "client": "Meridian Logistics",
+        "sender": "Apex Advisory",
+        "date": "March 2026",
+        "color": "#7c3aed",
+        "total_num": 3800.0,
+        "sections": [
+            {
+                "heading": "Understanding your needs",
+                "body": "Meridian wants a clear digital roadmap to reduce manual operations without a multi-year transformation program.",
+            },
+            {
+                "heading": "Proposed scope",
+                "body": "• Stakeholder interviews\n• Current-state assessment\n• Prioritized roadmap and business case\n• 30-day implementation advisory",
+            },
+            {
+                "heading": "Timeline",
+                "body": "Four weeks from kickoff to final roadmap presentation.",
+            },
+            {
+                "heading": "Next steps",
+                "body": "Approve this engagement, introduce stakeholders, and book the kickoff workshop.",
+            },
+        ],
+        "line_items": [
+            {"name": "Discovery interviews & audit", "qty": 1, "total": 900.0},
+            {"name": "Strategy recommendations report", "qty": 1, "total": 1500.0},
+            {"name": "Roadmap workshop", "qty": 1, "total": 800.0},
+            {"name": "30-day advisory support", "qty": 1, "total": 600.0},
+        ],
+    },
+]
 
 
 # ---------- Health ----------
@@ -170,6 +290,44 @@ def landing(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(
         "landing.html",
         _flash_ctx(request, page="landing"),
+    )
+
+
+@app.get("/samples", response_class=HTMLResponse)
+def samples_index(request: Request) -> HTMLResponse:
+    cards = [
+        {
+            "tag": s["tag"],
+            "title": s["title"],
+            "blurb": s["blurb"],
+            "total": s["total"],
+            "href": s["href"],
+        }
+        for s in SAMPLE_CATALOGUE
+    ]
+    return templates.TemplateResponse(
+        "samples.html",
+        _flash_ctx(request, samples=cards),
+    )
+
+
+@app.get("/samples/{sample_id}", response_class=HTMLResponse)
+def sample_detail(request: Request, sample_id: str) -> HTMLResponse:
+    sample = next((s for s in SAMPLE_CATALOGUE if s["id"] == sample_id), None)
+    if not sample:
+        return templates.TemplateResponse(
+            "error.html",
+            _flash_ctx(
+                request,
+                code=404,
+                title="Sample not found",
+                message="That example does not exist. Browse all samples from the examples page.",
+            ),
+            status_code=404,
+        )
+    return templates.TemplateResponse(
+        "sample_detail.html",
+        _flash_ctx(request, sample=sample),
     )
 
 
@@ -749,13 +907,14 @@ def settings_save(
     user = current_user(request)
     if not user:
         return RedirectResponse("/login", status_code=303)
-    msg = "Settings saved."
+    msg = "Your settings have been saved."
     is_pro = int(user.get("is_pro") or 0)
-    # Demo unlock: set PRO_UNLOCK_CODE env (default proposalforge-pro)
     unlock = _env("PRO_UNLOCK_CODE", "proposalforge-pro")
     if pro_code.strip() and pro_code.strip() == unlock:
         is_pro = 1
-        msg = "Settings saved. Pro unlocked for this account."
+        msg = "Settings saved. Pro is now active on this account."
+    elif pro_code.strip() and pro_code.strip() != unlock:
+        msg = "Settings saved. That promo code was not recognized."
     conn = get_connection()
     try:
         conn.execute(

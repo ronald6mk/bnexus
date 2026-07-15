@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Example proposals — B-nexus{% endblock %}
+{% block content %}
+<div class="container" style="padding-bottom:3.5rem;">
+  <div class="page-header reveal" style="text-align:center;flex-direction:column;align-items:center;">
+    <div>
+      <h1>Example proposals</h1>
+      <p class="sub">See the structure and quality clients open — then create your own.</p>
+    </div>
+  </div>
+
+  <div class="grid grid-3">
+    {% for s in samples %}
+    <article class="card sample-card reveal">
+      <span class="sample-tag">{{ s.tag }}</span>
+      <h3>{{ s.title }}</h3>
+      <p>{{ s.blurb }}</p>
+      <div class="sample-lines"><span></span><span></span><span></span><span></span></div>
+      <p class="muted" style="font-size:0.85rem;margin-bottom:0.85rem;"><strong>Indicative total:</strong> {{ s.total }}</p>
+      <a class="btn btn-ghost btn-sm" href="{{ s.href }}">Open full sample</a>
+    </article>
+    {% endfor %}
+  </div>
+
+  <div class="cta-band reveal" style="margin-top:2.5rem;">
+    <h2>Ready to create yours?</h2>
+    <p>Start free — export a branded PDF in minutes.</p>
+    <a class="btn" href="/signup">Start free</a>
+  </div>
+</div>
+{% endblock %}

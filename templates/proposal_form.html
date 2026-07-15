@@ -1,43 +1,48 @@
 {% extends "base.html" %}
 {% block title %}New proposal — B-nexus{% endblock %}
 {% block content %}
-<div class="container" style="padding-bottom:2.5rem;">
-  <div class="page-header">
-    <h1>New proposal</h1>
-    <a class="btn btn-ghost btn-sm" href="/dashboard">← Dashboard</a>
+<div class="mid" style="padding-bottom:3rem;">
+  <div class="page-header reveal">
+    <div>
+      <h1>New proposal</h1>
+      <p class="sub">Fill in the brief — we’ll draft structure, scope, and pricing you can edit.</p>
+    </div>
+    <a class="btn btn-ghost btn-sm" href="/dashboard">Dashboard</a>
   </div>
 
-  {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+  {% if error %}<div class="alert alert-error reveal">{{ error }}</div>{% endif %}
   {% if not usage.is_pro %}
-  <div class="alert alert-warn">
-    Free tier: {{ usage.used_this_month }} / {{ usage.limit }} proposals this month.
-    PDFs include a watermark. <a href="/#pricing">Upgrade</a> or unlock via Settings.
+  <div class="alert alert-warn reveal">
+    Free plan: {{ usage.used_this_month }} / {{ usage.limit }} proposals this month.
+    PDFs include a subtle watermark.
+    <a href="/#pricing">See Pro plans</a>
   </div>
   {% endif %}
 
-  <form method="post" action="/proposals/new" class="card">
-    <h2 style="margin-top:0;font-size:1.15rem;">Client &amp; engagement</h2>
+  <form method="post" action="/proposals/new" class="form-card reveal reveal-delay-1">
+    <p class="form-section-title" style="margin-top:0;border:0;padding:0;">Client &amp; engagement</p>
+
     <div class="form-row">
-      <div>
-        <label for="client_name">Client contact name *</label>
-        <input id="client_name" name="client_name" required value="{{ form.get('client_name','') }}" {% if not allowed %}disabled{% endif %} />
+      <div class="field">
+        <label for="client_name">Client contact name</label>
+        <input id="client_name" name="client_name" required value="{{ form.get('client_name','') }}" placeholder="Sam Rivera" {% if not allowed %}disabled{% endif %} />
       </div>
-      <div>
+      <div class="field">
         <label for="client_company">Client company</label>
-        <input id="client_company" name="client_company" value="{{ form.get('client_company','') }}" {% if not allowed %}disabled{% endif %} />
+        <input id="client_company" name="client_company" value="{{ form.get('client_company','') }}" placeholder="Horizon Retail" {% if not allowed %}disabled{% endif %} />
       </div>
     </div>
 
     <div class="form-row">
-      <div>
-        <label for="industry">Industry / type *</label>
+      <div class="field">
+        <label for="industry">Proposal type</label>
         <select id="industry" name="industry" {% if not allowed %}disabled{% endif %}>
           {% for key, label in industries.items() %}
           <option value="{{ key }}" {% if form.get('industry')==key %}selected{% endif %}>{{ label }}</option>
           {% endfor %}
         </select>
       </div>
-      <div>
+      <div class="field">
         <label for="budget_range">Budget range</label>
         <select id="budget_range" name="budget_range" {% if not allowed %}disabled{% endif %}>
           {% for b in budget_ranges %}
@@ -48,7 +53,7 @@
     </div>
 
     <div class="form-row">
-      <div>
+      <div class="field">
         <label for="timeline">Timeline</label>
         <select id="timeline" name="timeline" {% if not allowed %}disabled{% endif %}>
           {% for t in timelines %}
@@ -56,43 +61,49 @@
           {% endfor %}
         </select>
       </div>
-      <div>
-        <label for="services">Services (comma or newline separated)</label>
+      <div class="field">
+        <label for="services">Services (comma-separated)</label>
         <input id="services" name="services" placeholder="Discovery, Design, Build, Launch" value="{{ form.get('services','') }}" {% if not allowed %}disabled{% endif %} />
       </div>
     </div>
 
-    <label for="goals">Goals / outcomes</label>
-    <textarea id="goals" name="goals" placeholder="Increase qualified leads, reduce support tickets, modernize stack…" {% if not allowed %}disabled{% endif %}>{{ form.get('goals','') }}</textarea>
+    <div class="field">
+      <label for="goals">Goals &amp; outcomes</label>
+      <textarea id="goals" name="goals" placeholder="Increase qualified leads, modernize the stack, reduce support tickets…" {% if not allowed %}disabled{% endif %}>{{ form.get('goals','') }}</textarea>
+    </div>
 
-    <label for="differentiators">Your differentiators (optional)</label>
-    <textarea id="differentiators" name="differentiators" placeholder="10 years MSP experience, fixed-price phases, local support…" {% if not allowed %}disabled{% endif %}>{{ form.get('differentiators','') }}</textarea>
+    <div class="field">
+      <label for="differentiators">What makes you the right fit <span class="muted" style="font-weight:500;">(optional)</span></label>
+      <textarea id="differentiators" name="differentiators" placeholder="Fixed-price phases, weekly demos, local support…" {% if not allowed %}disabled{% endif %}>{{ form.get('differentiators','') }}</textarea>
+    </div>
 
-    <h2 style="font-size:1.15rem;">Your brand (for PDF)</h2>
+    <p class="form-section-title">Your brand on this PDF</p>
     <div class="form-row">
-      <div>
-        <label for="company_name">Sender company</label>
-        <input id="company_name" name="company_name" value="{{ form.get('company_name') or (user.company_name if user else '') }}" {% if not allowed %}disabled{% endif %} />
+      <div class="field">
+        <label for="company_name">Your company name</label>
+        <input id="company_name" name="company_name" value="{{ form.get('company_name') or (user.company_name if user else '') }}" placeholder="Northstar Studio" {% if not allowed %}disabled{% endif %} />
       </div>
-      <div>
+      <div class="field">
         <label for="brand_color">Brand color</label>
-        <input id="brand_color" type="color" name="brand_color" value="{{ form.get('brand_color') or (user.brand_color if user and user.brand_color else '#1a56db') }}" {% if not allowed %}disabled{% endif %} />
+        <input id="brand_color" type="color" name="brand_color" value="{{ form.get('brand_color') or (user.brand_color if user and user.brand_color else '#0d9488') }}" {% if not allowed %}disabled{% endif %} />
       </div>
     </div>
     <div class="form-row">
-      <div>
-        <label for="sender_name">Sender name</label>
+      <div class="field">
+        <label for="sender_name">Your name</label>
         <input id="sender_name" name="sender_name" value="{{ form.get('sender_name') or (user.sender_name if user else '') }}" {% if not allowed %}disabled{% endif %} />
       </div>
-      <div>
-        <label for="sender_email">Sender email</label>
+      <div class="field">
+        <label for="sender_email">Contact email</label>
         <input id="sender_email" type="email" name="sender_email" value="{{ form.get('sender_email') or (user.sender_email if user else '') or (user.email if user else '') }}" {% if not allowed %}disabled{% endif %} />
       </div>
     </div>
-    <label for="sender_phone">Sender phone</label>
-    <input id="sender_phone" name="sender_phone" value="{{ form.get('sender_phone') or (user.sender_phone if user else '') }}" {% if not allowed %}disabled{% endif %} />
+    <div class="field">
+      <label for="sender_phone">Phone <span class="muted" style="font-weight:500;">(optional)</span></label>
+      <input id="sender_phone" name="sender_phone" value="{{ form.get('sender_phone') or (user.sender_phone if user else '') }}" {% if not allowed %}disabled{% endif %} />
+    </div>
 
-    <button class="btn" type="submit" {% if not allowed %}disabled{% endif %}>Generate proposal</button>
+    <button class="btn btn-block" type="submit" {% if not allowed %}disabled{% endif %}>Generate proposal</button>
   </form>
 </div>
 {% endblock %}
