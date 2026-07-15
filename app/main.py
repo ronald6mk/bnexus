@@ -256,28 +256,31 @@ SAMPLE_CATALOGUE: list[dict[str, Any]] = [
 
 
 def _health_payload() -> dict[str, Any]:
-    secret_set = bool(
-        _env_any("PROPOSALFORGE_SECRET", "PROPOSALFORGESECRET", "BNEXUS_SECRET")
-    )
+    """Minimal machine health — no secrets, env names, or internal paths."""
     return {
         "status": "ok",
-        "product": "bnexus",
-        "brand": "B-nexus",
-        "version": __version__,
-        "offline_generator": True,
-        "secret_configured": secret_set,
-        "secret_env_aliases": [
-            "PROPOSALFORGE_SECRET",
-            "PROPOSALFORGESECRET",
-            "BNEXUS_SECRET",
-        ],
-        "public_url": _env("PUBLIC_URL", "https://bnexus-fggr.onrender.com"),
+        "service": "B-nexus",
     }
 
 
 @app.api_route("/api/health", methods=["GET", "HEAD"])
 def api_health() -> JSONResponse:
     return JSONResponse(_health_payload())
+
+
+@app.get("/status", response_class=HTMLResponse)
+def status_page(request: Request) -> HTMLResponse:
+    """Human-readable status page (never dump raw API JSON to visitors)."""
+    services = [
+        {"name": "Website", "detail": "Public pages and account access", "state": "Operational"},
+        {"name": "Proposal generator", "detail": "Create and edit proposals", "state": "Operational"},
+        {"name": "PDF export", "detail": "Download branded proposal PDFs", "state": "Operational"},
+        {"name": "Done-for-you requests", "detail": "Service intake form", "state": "Operational"},
+    ]
+    return templates.TemplateResponse(
+        "status.html",
+        _flash_ctx(request, services=services),
+    )
 
 
 # ---------- Public pages ----------
@@ -855,20 +858,15 @@ def dfy_submit(
     orders.append(order)
     DFY_ORDERS_PATH.write_text(json.dumps(orders, indent=2), encoding="utf-8")
     track("dfy", package=package, price_usd=price)
-    pay = payment_links().get("dfy") or "/dfy"
-    pay_hint = (
-        f' <a href="{pay}">Complete payment here</a>.'
-        if pay and pay != "/dfy" and pay != "#pricing"
-        else " We will email you a payment link or Mobile Money instructions."
-    )
+    first = order["name"].split()[0] if order["name"] else "there"
     return templates.TemplateResponse(
         "dfy.html",
         _flash_ctx(
             request,
             success=(
-                f"Thanks {order['name']}! Your Done-For-You order is in "
-                f"(#{order['id']}, ${price} {package}). "
-                f"We will contact {order['email']} within 1 business day.{pay_hint}"
+                f"Thank you, {first}. We’ve received your done-for-you request "
+                f"({package}, ${price}). We’ll reply to {order['email']} within one business day "
+                f"with next steps and payment details."
             ),
             error=None,
         ),

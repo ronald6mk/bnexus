@@ -1,69 +1,172 @@
 {% extends "base.html" %}
-{% block title %}Done-for-you proposal — B-nexus{% endblock %}
+{% block title %}Done-for-you proposals — B-nexus{% endblock %}
 {% block content %}
-<div class="mid" style="padding: 1rem 0 3.5rem;">
-  <div class="page-header reveal" style="margin-bottom:0.5rem;">
-    <div>
-      <h1>Done-for-you proposal</h1>
-      <p class="sub">You share the client brief. We deliver a polished PDF you can send.</p>
-    </div>
-    <a class="btn btn-ghost btn-sm" href="/samples">See examples first</a>
-  </div>
+<div class="container" style="padding: 1.5rem 0 3.5rem;">
 
-  <div class="form-card reveal reveal-delay-1">
-    {% if success %}<div class="alert alert-ok">{{ success|safe }}</div>{% endif %}
-    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
-
-    <form method="post" action="/dfy" id="dfy-form">
-      <p class="form-section-title" style="margin-top:0;border:0;padding:0;">Choose a package</p>
-      <div class="package-cards">
-        <label class="package-option">
-          <input type="radio" name="package" value="standard" checked />
-          <strong>Standard · $49</strong>
-          <span>Full proposal PDF from your brief · ~1 business day</span>
-        </label>
-        <label class="package-option">
-          <input type="radio" name="package" value="premium" />
-          <strong>Premium · $99</strong>
-          <span>Deeper scope notes + pricing options · priority turnaround</span>
-        </label>
+  {% if success %}
+  <div class="mid">
+    <div class="form-card reveal" style="text-align:center;padding:2.5rem 1.75rem;">
+      <div class="empty-icon" style="margin:0 auto 1rem;">✓</div>
+      <h1 style="margin:0 0 0.5rem;">Request received</h1>
+      <p class="form-intro" style="margin-bottom:1.25rem;">{{ success }}</p>
+      <div class="hero-cta" style="justify-content:center;">
+        <a class="btn" href="/samples">Browse sample proposals</a>
+        <a class="btn btn-ghost" href="/">Home</a>
       </div>
-
-      <p class="form-section-title">Your details</p>
-      <div class="form-row">
-        <div class="field">
-          <label for="name">Full name</label>
-          <input id="name" name="name" required autocomplete="name" placeholder="Jordan Lee" />
-        </div>
-        <div class="field">
-          <label for="email">Work email</label>
-          <input id="email" type="email" name="email" required autocomplete="email" placeholder="you@company.com" />
-        </div>
-      </div>
-      <div class="field">
-        <label for="company">Business or agency name</label>
-        <input id="company" name="company" autocomplete="organization" placeholder="Lee Digital Agency" />
-        <span class="hint">Shown as the sender on the proposal you deliver to your client.</span>
-      </div>
-
-      <p class="form-section-title">About the engagement</p>
-      <div class="field">
-        <label for="client_context">Client &amp; project brief</label>
-        <textarea id="client_context" name="client_context" required placeholder="Who is the client? What services are you offering? Approximate budget and deadline? Any must-win points?"></textarea>
-        <span class="hint">The more context you share, the stronger the proposal.</span>
-      </div>
-      <div class="field">
-        <label for="notes">Preferences (optional)</label>
-        <textarea id="notes" name="notes" placeholder="Tone (formal / friendly), brand color, sections to emphasize…"></textarea>
-      </div>
-
-      <button class="btn btn-block btn-accent" type="submit">Submit request</button>
-      <p class="muted" style="text-align:center;margin:1rem 0 0;font-size:0.85rem;">
-        We confirm by email within one business day.
-        Questions? <a href="mailto:ronald6mk@gmail.com">ronald6mk@gmail.com</a>
+      <p class="muted" style="margin-top:1.25rem;font-size:0.88rem;">
+        Prefer to write? <a href="mailto:ronald6mk@gmail.com?subject=B-nexus%20Done-for-you%20proposal">Email ronald6mk@gmail.com</a>
       </p>
-    </form>
+    </div>
   </div>
+  {% else %}
+
+  <section class="hero" style="padding-top:1.5rem;padding-bottom:1rem;grid-template-columns:1fr;">
+    <div class="reveal" style="max-width:40rem;">
+      <div class="badge"><span class="badge-dot"></span> Professional writing service</div>
+      <h1>Done-for-you client proposals</h1>
+      <p class="lead">
+        You send the brief. We write a polished, branded proposal PDF you can forward to your client —
+        typically within one business day after confirmation.
+      </p>
+      <div class="hero-cta">
+        <a class="btn" href="#request">Request a proposal</a>
+        <a class="btn btn-ghost" href="/samples">See what you’ll receive</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:1.5rem;">
+    <h2 class="reveal">What’s included</h2>
+    <p class="section-sub reveal">The same structure as our product samples — written for your deal.</p>
+    <div class="grid grid-3">
+      <div class="card reveal reveal-delay-1">
+        <h3>Full proposal draft</h3>
+        <p>Cover, understanding, scope, timeline, investment table, assumptions, and next steps.</p>
+      </div>
+      <div class="card reveal reveal-delay-2">
+        <h3>Your brand on the PDF</h3>
+        <p>Your company name and positioning as the sender — ready to send under your name.</p>
+      </div>
+      <div class="card reveal reveal-delay-3">
+        <h3>One revision pass</h3>
+        <p>Standard package includes one round of edits after you review the first draft.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:0.5rem;">
+    <h2 class="reveal">How it works</h2>
+    <div class="grid grid-3 howto">
+      <div class="card step-card reveal reveal-delay-1">
+        <h3>Share the brief</h3>
+        <p>Client name, services, goals, budget range, and deadline — use the form or email.</p>
+      </div>
+      <div class="card step-card reveal reveal-delay-2">
+        <h3>We write &amp; design</h3>
+        <p>We produce a client-ready PDF aligned with B-nexus proposal structure.</p>
+      </div>
+      <div class="card step-card reveal reveal-delay-3">
+        <h3>You review &amp; send</h3>
+        <p>Approve the draft, request small edits if needed, then send it to your client.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:0.5rem;" id="packages">
+    <h2 class="reveal">Packages</h2>
+    <p class="section-sub reveal">Clear pricing. No subscriptions required for this service.</p>
+    <div class="grid grid-2" style="max-width:800px;margin:0 auto;">
+      <div class="card reveal reveal-delay-1">
+        <h3>Standard</h3>
+        <div class="price">$49<small> one-time</small></div>
+        <ul class="feature-list">
+          <li>One client proposal PDF</li>
+          <li>Scope, timeline &amp; pricing table</li>
+          <li>One revision round</li>
+          <li>~1 business day after confirmation</li>
+        </ul>
+      </div>
+      <div class="card featured reveal reveal-delay-2">
+        <h3>Premium</h3>
+        <div class="price">$99<small> one-time</small></div>
+        <ul class="feature-list">
+          <li>Everything in Standard</li>
+          <li>Deeper discovery notes</li>
+          <li>Two pricing options in the table</li>
+          <li>Priority turnaround when possible</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="request" style="padding-top:0.5rem;">
+    <div class="mid">
+      <div class="page-header reveal" style="margin-bottom:0.75rem;">
+        <div>
+          <h1 style="font-size:1.5rem;">Request this service</h1>
+          <p class="sub">We reply to the email you provide. Payment instructions are sent after we confirm fit.</p>
+        </div>
+      </div>
+
+      {% if error %}<div class="alert alert-error reveal">{{ error }}</div>{% endif %}
+
+      <div class="form-card reveal reveal-delay-1">
+        <form method="post" action="/dfy" novalidate>
+          <fieldset style="border:0;margin:0;padding:0;">
+            <legend class="form-section-title" style="margin-top:0;border:0;padding:0;width:100%;">Package</legend>
+            <div class="package-cards">
+              <label class="package-option active">
+                <input type="radio" name="package" value="standard" checked />
+                <strong>Standard · $49</strong>
+                <span>Most requests</span>
+              </label>
+              <label class="package-option">
+                <input type="radio" name="package" value="premium" />
+                <strong>Premium · $99</strong>
+                <span>Complex bids</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <p class="form-section-title">Contact</p>
+          <div class="form-row">
+            <div class="field">
+              <label for="name">Your full name <span style="color:var(--danger)">*</span></label>
+              <input id="name" name="name" type="text" required autocomplete="name" />
+            </div>
+            <div class="field">
+              <label for="email">Email address <span style="color:var(--danger)">*</span></label>
+              <input id="email" name="email" type="email" required autocomplete="email" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="company">Your company or agency</label>
+            <input id="company" name="company" type="text" autocomplete="organization" />
+            <span class="hint">Used as the sender on the proposal PDF.</span>
+          </div>
+
+          <p class="form-section-title">Project brief</p>
+          <div class="field">
+            <label for="client_context">Client &amp; project details <span style="color:var(--danger)">*</span></label>
+            <textarea id="client_context" name="client_context" required rows="6"></textarea>
+            <span class="hint">Include: who the client is, services you offer, goals, budget band, and deadline.</span>
+          </div>
+          <div class="field">
+            <label for="notes">Anything else we should know</label>
+            <textarea id="notes" name="notes" rows="3"></textarea>
+          </div>
+
+          <button class="btn btn-block" type="submit">Send request</button>
+          <p class="muted" style="text-align:center;margin:1rem 0 0;font-size:0.85rem;line-height:1.5;">
+            Or email your brief directly:<br />
+            <a href="mailto:ronald6mk@gmail.com?subject=Done-for-you%20proposal%20request">ronald6mk@gmail.com</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  {% endif %}
 </div>
 <script>
   document.querySelectorAll('.package-option').forEach(function (el) {
@@ -74,7 +177,5 @@
       if (input) input.checked = true;
     });
   });
-  var checked = document.querySelector('.package-option input:checked');
-  if (checked) checked.closest('.package-option').classList.add('active');
 </script>
 {% endblock %}

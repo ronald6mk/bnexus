@@ -170,8 +170,7 @@ def test_health_endpoint():
     assert r.status_code == 200
     data = r.json()
     assert data["status"] == "ok"
-    assert data["product"] in ("proposalforge", "bnexus")
-    assert data["offline_generator"] is True
+    assert data.get("service") == "B-nexus" or data.get("product") in ("proposalforge", "bnexus")
 
 
 def test_signup_generate_download_flow():

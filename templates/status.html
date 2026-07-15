@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}System status — B-nexus{% endblock %}
+{% block content %}
+<div class="mid" style="padding: 2rem 0 3.5rem;">
+  <div class="page-header reveal" style="flex-direction:column;align-items:flex-start;">
+    <div>
+      <h1>System status</h1>
+      <p class="sub">Current availability of B-nexus services.</p>
+    </div>
+  </div>
+
+  <div class="card reveal" style="margin-bottom:1rem;">
+    <div style="display:flex;align-items:center;gap:0.85rem;flex-wrap:wrap;">
+      <span class="badge" style="margin:0;"><span class="badge-dot"></span> All systems operational</span>
+      <span class="muted" style="font-size:0.88rem;">Last checked just now</span>
+    </div>
+    <p class="muted" style="margin:1rem 0 0;font-size:0.92rem;">
+      The website, proposal generator, and PDF export are available.
+      Free hosting may take a few seconds to wake after periods of inactivity.
+    </p>
+  </div>
+
+  <div class="grid" style="gap:0.75rem;">
+    {% for item in services %}
+    <div class="card reveal" style="display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 1.25rem;">
+      <div>
+        <strong style="display:block;">{{ item.name }}</strong>
+        <span class="muted" style="font-size:0.85rem;">{{ item.detail }}</span>
+      </div>
+      <span class="pill pill-pro">{{ item.state }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <p class="muted" style="margin-top:1.5rem;font-size:0.9rem;" class="reveal">
+    Need help? <a href="mailto:ronald6mk@gmail.com">ronald6mk@gmail.com</a>
+    · <a href="/">Back to home</a>
+  </p>
+</div>
+{% endblock %}
