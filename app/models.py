@@ -38,7 +38,7 @@ PRICING = {
         "features": [
             "3 proposals per calendar month",
             "Offline template generator",
-            "PDF export with watermark",
+            "Branded PDF export (watermark on free)",
             "Edit sections & line items",
         ],
     },
