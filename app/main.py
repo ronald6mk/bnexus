@@ -137,11 +137,22 @@ def _flash_ctx(request: Request, **extra: Any) -> dict[str, Any]:
 
 @app.get("/api/health")
 def api_health() -> dict[str, Any]:
+    secret_set = bool(
+        _env_any("PROPOSALFORGE_SECRET", "PROPOSALFORGESECRET", "BNEXUS_SECRET")
+    )
     return {
         "status": "ok",
-        "product": "proposalforge",
+        "product": "bnexus",
+        "brand": "B-nexus",
         "version": __version__,
         "offline_generator": True,
+        "secret_configured": secret_set,
+        "secret_env_aliases": [
+            "PROPOSALFORGE_SECRET",
+            "PROPOSALFORGESECRET",
+            "BNEXUS_SECRET",
+        ],
+        "public_url": _env("PUBLIC_URL", "https://bnexus-fggr.onrender.com"),
     }
 
 

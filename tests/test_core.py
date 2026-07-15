@@ -170,7 +170,7 @@ def test_health_endpoint():
     assert r.status_code == 200
     data = r.json()
     assert data["status"] == "ok"
-    assert data["product"] == "proposalforge"
+    assert data["product"] in ("proposalforge", "bnexus")
     assert data["offline_generator"] is True
 
 

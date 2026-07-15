@@ -102,12 +102,16 @@ def get_session(token: Optional[str]) -> Optional[dict[str, Any]]:
 
 
 def set_session_cookie(response: Response, token: str) -> None:
+    # secure=True only in production HTTPS (Render). Off for local/pytest.
+    use_secure = os.environ.get("RENDER", "").lower() in ("true", "1") or bool(
+        os.environ.get("RENDER_EXTERNAL_URL")
+    )
     response.set_cookie(
         key=SESSION_COOKIE,
         value=token,
         httponly=True,
         samesite="lax",
-        secure=True,  # HTTPS on Render
+        secure=use_secure,
         max_age=SESSION_DAYS * 86400,
         path="/",
     )
