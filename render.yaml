@@ -1,18 +1,23 @@
-# Free public URL via Render.com
-# Docs: https://render.com/docs/free
+# B-nexus on Render Free — repo: https://github.com/ronald6mk/bnexus
+# One-click: https://render.com/deploy?repo=https://github.com/ronald6mk/bnexus
 services:
   - type: web
     name: bnexus
     runtime: python
     plan: free
+    region: oregon
+    branch: master
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
     envVars:
-      - key: PROPOSALFORGE_SECRET
-        generateValue: true
       - key: PYTHON_VERSION
         value: "3.12.0"
-      # Add later after Lemon Squeezy products exist:
+      - key: PROPOSALFORGE_SECRET
+        generateValue: true
+      - key: ADMIN_PRO_EMAIL
+        value: ronald6mk@gmail.com
+      # Paste Lemon Squeezy checkout links in Render Dashboard after deploy:
       # PAYMENT_LINK_PRO
       # PAYMENT_LINK_LIFETIME
       # PAYMENT_LINK_DFY
