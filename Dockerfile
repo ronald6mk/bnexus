@@ -12,8 +12,6 @@ COPY . .
 
 RUN mkdir -p data samples
 
-# Render/Railway set PORT
-ENV PORT=8787
-EXPOSE 8787
-
-CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT}
+# Render injects PORT; shell form required so $PORT expands
+EXPOSE 10000
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
